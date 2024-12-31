@@ -1,0 +1,68 @@
+syntax = "proto3";
+
+package TaskoMask.BuildingBlocks.Contracts.Protos;
+
+import "google/protobuf/timestamp.proto";
+
+
+message CreationTimeGrpcResponse{
+	google.protobuf.Timestamp createDateTime=1;
+	string createDateTimeString=2;
+	google.protobuf.Timestamp modifiedDateTime=3;
+	string modifiedDateTimeString=4;
+	int32 createDay=5;
+	int32 createMonth=6;
+	int32 createYear=7;
+}
+
+
+message GetProjectGrpcResponse {
+
+	CreationTimeGrpcResponse creationTime=1;
+	string id = 2;
+	string name = 3;
+	string description = 4;
+	string organizationId = 5;
+	string organizationName = 6;
+}
+
+
+message GetBoardGrpcResponse {
+
+	CreationTimeGrpcResponse creationTime=1;
+	string id = 2;
+	string name = 3;
+	string description = 4;
+	string ownerId = 5;
+	string organizationId = 6;
+	string organizationName = 7;
+	string projectId = 8;
+	string projectName = 9;
+}
+
+message GetTaskGrpcResponse {
+
+	CreationTimeGrpcResponse creationTime=1;
+	string id = 2;
+	string title = 3;
+	string description = 4;
+	string cardId = 5;
+	string cardName = 6;
+	string organizationId = 7;
+	string projectId = 8;
+	string boardId = 9;
+}
+
+message GetCardGrpcResponse {
+
+	CreationTimeGrpcResponse creationTime=1;
+	string id = 2;
+	string name = 3;
+	int32 type = 4;
+	string boardId = 5;
+	string projectId = 6;
+	string organizationId = 7;
+	string ownerId = 8;
+}
+
+

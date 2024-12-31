@@ -1,0 +1,22 @@
+{
+  "Routes": [
+    {
+      "SwaggerKey": "Owners.Read",
+      "Priority": 0,
+      "UpstreamPathTemplate": "/owners-read/{everything}",
+      "UpstreamHttpMethod": [ "GET" ],
+      "DownstreamPathTemplate": "/{everything}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5021
+        }
+      ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "IdentityApiKey",
+        "AllowedScopes": [ "owners.read", "profile", "openid" ]
+      }
+    }
+  ]
+}

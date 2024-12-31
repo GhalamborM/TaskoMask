@@ -1,0 +1,37 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <base href="/" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TaskoMask Identity</title>
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+    <link href="content/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="content/css/rewrite.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+
+</head>
+<body class="bg-primary">
+
+    <section id="cover">
+        <div id="cover-caption">
+            <div class="container">
+                <div class="row text-white">
+                    <div class="col-xl-5 col-lg-6 col-md-8 col-sm-10 mx-auto text-center form p-4">
+                        @RenderBody()
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <script src="content/js/jquery.min.js"></script>
+    <script src="content/js/bootstrap.min.js"></script>
+    <script src="content/js/jquery.validate.min.js"></script>
+    <script src="content/js/jquery.validate.unobtrusive.min.js"></script>
+
+    @RenderSection("scripts", required: false)
+
+</body>
+</html>

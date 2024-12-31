@@ -1,0 +1,23 @@
+{
+  "Routes": [
+    {
+      "SwaggerKey": "Tasks.Read",
+      "Priority": 0,
+      "UpstreamPathTemplate": "/tasks-read/{everything}",
+      "UpstreamHttpMethod": [ "GET" ],
+      "DownstreamPathTemplate": "/{everything}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5029
+        }
+      ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "IdentityApiKey",
+        "AllowedScopes": [ "tasks.read", "profile", "openid" ]
+      }
+
+    }
+  ]
+}
