@@ -1,0 +1,26 @@
+{
+  "profiles": {
+    "Docker Compose": {
+      "commandName": "DockerCompose",
+      "commandVersion": "1.0",
+      "serviceActions": {
+        "mongo": "StartWithoutDebugging",
+        "redis": "StartWithoutDebugging",
+        "seq": "StartWithoutDebugging",
+        "sql": "StartWithoutDebugging",
+        "rabbitmq": "StartWithoutDebugging",
+        "owners-read-api": "StartWithoutDebugging",
+        "owners-write-api": "StartWithoutDebugging",
+        "boards-read-api": "StartWithoutDebugging",
+        "boards-write-api": "StartWithoutDebugging",
+        "tasks-read-api": "StartWithoutDebugging",
+        "tasks-write-api": "StartWithoutDebugging",
+        "identity-api": "StartWithoutDebugging",
+        "aggregator": "StartWithoutDebugging",
+        "api-gateway": "StartWithoutDebugging",
+        "user-panel-client": "StartWithoutDebugging",
+        "website-client": "StartWithoutDebugging"
+      }
+    }
+  }
+}

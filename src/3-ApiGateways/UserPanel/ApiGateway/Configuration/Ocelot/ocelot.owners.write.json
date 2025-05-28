@@ -1,0 +1,36 @@
+{
+  "Routes": [
+    {
+      "SwaggerKey": "Owners.Write",
+      "Priority": 1,
+      "UpstreamPathTemplate": "/owners-write/owner",
+      "UpstreamHttpMethod": [ "POST" ],
+      "DownstreamPathTemplate": "/owner",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5019
+        }
+      ]
+    },
+    {
+      "SwaggerKey": "Owners.Write",
+      "Priority": 0,
+      "UpstreamPathTemplate": "/owners-write/{everything}",
+      "UpstreamHttpMethod": [ "POST", "PUT", "DELETE" ],
+      "DownstreamPathTemplate": "/{everything}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5019
+        }
+      ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "IdentityApiKey",
+        "AllowedScopes": [ "owners.write", "profile", "openid" ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,77 @@
+---
+#----------------------------------------------------------------------------------
+#                                                                                  |
+# If you want to run or debug some clients or services you need to first make the  |
+# environment ready because they have some dependencies like MongoDB, Redis, etc.  |
+#                                                                                  |
+# Just run the below command through CLI and then the environment is ready:        |
+#                                                                                  |
+# ...\TaskoMask\src\7-Docker> docker-compose -f Infrastructure.yml up -d            |
+#                                                                                  |
+# For more informition go to the releated documentation on GitHub:                 |
+#                                                                                  |
+# https://github.com/hamed-shirbandi/TaskoMask/wiki/Development-Setup              |
+#----------------------------------------------------------------------------------
+
+version: "3.4"
+
+services:
+  seq:
+    container_name: seq
+    image: datalust/seq
+    restart: unless-stopped
+    ports:
+      - "5340:80"
+      - 5341:5341
+    volumes:
+      - seq:/data
+    environment:
+      ACCEPT_EULA: "Y"
+
+  redis:
+    container_name: redis
+    image: redis:alpine
+    restart: unless-stopped
+    ports:
+      - 6379:6379
+    volumes:
+      - redis:/data/db
+
+  mongo:
+    container_name: mongo
+    image: mongo:4.4.6
+    restart: unless-stopped
+    ports:
+      - 27017:27017
+    volumes:
+      - mongo:/data/db
+
+  sql:
+    container_name: sql
+    image: mcr.microsoft.com/mssql/server
+    restart: unless-stopped
+    user: root
+    environment:
+      SA_PASSWORD: "Your_pass_!@2#33"
+      ACCEPT_EULA: "Y"
+    ports:
+      - "1433:1433"
+    volumes:
+      - sql:/var/opt/mssql/data
+
+  rabbitmq:
+    container_name: rabbitmq
+    image: masstransit/rabbitmq
+    restart: unless-stopped
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    volumes:
+      - rabbitmq:/var/lib/rabbitmq/mnesia/
+
+volumes:
+  redis:
+  mongo:
+  seq:
+  sql:
+  rabbitmq:

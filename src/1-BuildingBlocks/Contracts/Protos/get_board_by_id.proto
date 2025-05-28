@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package TaskoMask.BuildingBlocks.Contracts.Protos;
+
+import "base.proto";
+
+service GetBoardByIdGrpcService {
+  rpc Handle (GetBoardByIdGrpcRequest) returns (GetBoardGrpcResponse);
+}
+
+message GetBoardByIdGrpcRequest {
+  string id = 1;
+}
+

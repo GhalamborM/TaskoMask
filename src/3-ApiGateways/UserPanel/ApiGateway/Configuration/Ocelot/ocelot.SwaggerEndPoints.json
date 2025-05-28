@@ -1,0 +1,74 @@
+{
+  "SwaggerEndPoints": [
+    {
+      "Key": "Owners.Read",
+      "Config": [
+        {
+          "Name": "Owners Read APIs",
+          "Version": "v1",
+          "Url": "https://localhost:5021/swagger/v1/swagger.json"
+        }
+      ]
+    },
+    {
+      "Key": "Owners.Write",
+      "Config": [
+        {
+          "Name": "Owners Write APIs",
+          "Version": "v1",
+          "Url": "https://localhost:5019/swagger/v1/swagger.json"
+        }
+      ]
+    },
+    {
+      "Key": "Boards.Read",
+      "Config": [
+        {
+          "Name": "Boards Read APIs",
+          "Version": "v1",
+          "Url": "https://localhost:5025/swagger/v1/swagger.json"
+        }
+      ]
+    },
+    {
+      "Key": "Boards.Write",
+      "Config": [
+        {
+          "Name": "Boards Write APIs",
+          "Version": "v1",
+          "Url": "https://localhost:5023/swagger/v1/swagger.json"
+        }
+      ]
+    },
+    {
+      "Key": "Tasks.Read",
+      "Config": [
+        {
+          "Name": "Tasks Read APIs",
+          "Version": "v1",
+          "Url": "https://localhost:5029/swagger/v1/swagger.json"
+        }
+      ]
+    },
+    {
+      "Key": "Tasks.Write",
+      "Config": [
+        {
+          "Name": "Tasks Write APIs",
+          "Version": "v1",
+          "Url": "https://localhost:5027/swagger/v1/swagger.json"
+        }
+      ]
+    },
+    {
+      "Key": "Aggregator",
+      "Config": [
+        {
+          "Name": "Aggregator APIs",
+          "Version": "v1",
+          "Url": "https://localhost:5003/swagger/v1/swagger.json"
+        }
+      ]
+    }
+  ]
+}

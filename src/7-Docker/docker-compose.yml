@@ -1,0 +1,288 @@
+#----------------------------------------------------------------------------------
+#                                                                                  |
+# If you want to run all the clients and services and their dependencies without   |
+# needing to debug them, you can run the below commands through CLI:               |
+#                                                                                  |
+# ...\TaskoMask\src\7-Docker> docker-compose build                                 |
+# ...\TaskoMask\src\7-Docker> docker-compose up -d                                 |
+#                                                                                  |
+# But, if you need to do this in Visual Studio and debug some services, then you   |
+# can modify the launchSettings and set the desired services to StartDebugging and |
+# then select docker-compose in the debug items and click on DockerCompose         |
+#                                                                                  |
+# For more informition go to the releated documentation on GitHub:                 |
+#                                                                                  |
+# https://github.com/hamed-shirbandi/TaskoMask/wiki/Development-Setup              |
+#----------------------------------------------------------------------------------
+
+version: '3.4'
+
+services:
+
+  seq:
+    container_name: seq
+    image: datalust/seq
+    restart: unless-stopped
+    networks:
+      - taskomask-network
+    volumes:
+      - seq:/data
+
+  redis:
+    container_name: redis
+    image: redis:alpine
+    restart: unless-stopped
+    networks:
+      - taskomask-network
+    volumes:
+      - redis:/data/db
+
+  mongo:
+    container_name: mongo
+    image: mongo:4.4.6
+    restart: unless-stopped
+    networks:
+      - taskomask-network
+    volumes:
+      - mongo:/data/db
+
+  sql:
+    container_name: sql
+    image: mcr.microsoft.com/mssql/server
+    restart: unless-stopped
+    user: root
+    environment:
+      SA_PASSWORD: "Your_pass_!@2#33"
+      ACCEPT_EULA: "Y"
+    ports:
+      - "1433:1433"
+    volumes:
+      - sql:/var/opt/mssql/data
+
+  rabbitmq:
+    container_name: rabbitmq
+    image: masstransit/rabbitmq
+    restart: unless-stopped
+    networks:
+      - taskomask-network
+    volumes:
+      - rabbitmq:/var/lib/rabbitmq/mnesia/
+      
+  owners-read-api:
+    container_name: owners-read-api
+    image: ${DOCKER_REGISTRY-}owners-read-api
+    restart: on-failure
+    environment:
+      Mongo__Read__Connection: "mongodb://mongo:27017"
+      Mongo__Write__Connection: "mongodb://mongo:27017"
+      RabbitMQ__Host: "rabbitmq"
+    build:
+      context: ../..
+      dockerfile: src/2-Services/Owners/Api/Owners.Read.Api/Dockerfile
+    ports:
+      - 5020:80
+      - 5021:443
+    networks:
+      - taskomask-network
+    depends_on:
+      - mongo
+      - rabbitmq
+
+  owners-write-api:
+    container_name: owners-write-api
+    image: ${DOCKER_REGISTRY-}owners-write-api
+    restart: on-failure
+    environment:
+      Mongo__Read__Connection: "mongodb://mongo:27017"
+      Mongo__Write__Connection: "mongodb://mongo:27017"
+      Redis__Connection: "redis:6379"
+      RabbitMQ__Host: "rabbitmq"
+    build:
+      context: ../..
+      dockerfile: src/2-Services/Owners/Api/Owners.Read.Api/Dockerfile
+    ports:
+      - 5018:80
+      - 5019:443
+    networks:
+      - taskomask-network
+    depends_on:
+      - redis
+      - mongo
+      - rabbitmq
+
+  boards-read-api:
+    container_name: boards-read-api
+    image: ${DOCKER_REGISTRY-}boards-read-api
+    restart: on-failure
+    environment:
+      Mongo__Read__Connection: "mongodb://mongo:27017"
+      Mongo__Write__Connection: "mongodb://mongo:27017"
+      RabbitMQ__Host: "rabbitmq"
+    build:
+      context: ../..
+      dockerfile: src/2-Services/Boards/Api/Boards.Read.Api/Dockerfile
+    ports:
+      - 5024:80
+      - 5025:443
+    networks:
+      - taskomask-network
+    depends_on:
+      - mongo
+      - rabbitmq
+
+  boards-write-api:
+    container_name: boards-write-api
+    image: ${DOCKER_REGISTRY-}boards-write-api
+    restart: on-failure
+    environment:
+      Mongo__Read__Connection: "mongodb://mongo:27017"
+      Mongo__Write__Connection: "mongodb://mongo:27017"
+      Redis__Connection: "redis:6379"
+      RabbitMQ__Host: "rabbitmq"
+    build:
+      context: ../..
+      dockerfile: src/2-Services/Boards/Api/Boards.Write.Api/Dockerfile
+    ports:
+      - 5022:80
+      - 5023:443
+    networks:
+      - taskomask-network
+    depends_on:
+      - redis
+      - mongo
+      - rabbitmq
+
+  tasks-read-api:
+    container_name: tasks-read-api
+    image: ${DOCKER_REGISTRY-}tasks-read-api
+    restart: on-failure
+    environment:
+      Mongo__Read__Connection: "mongodb://mongo:27017"
+      Mongo__Write__Connection: "mongodb://mongo:27017"
+      RabbitMQ__Host: "rabbitmq"
+    build:
+      context: ../..
+      dockerfile: src/2-Services/Tasks/Api/Tasks.Read.Api/Dockerfile
+    ports:
+      - 5028:80
+      - 5029:443
+    networks:
+      - taskomask-network
+    depends_on:
+      - mongo
+      - rabbitmq
+
+  tasks-write-api:
+    container_name: tasks-write-api
+    image: ${DOCKER_REGISTRY-}tasks-write-api
+    restart: on-failure
+    environment:
+      Mongo__Read__Connection: "mongodb://mongo:27017"
+      Mongo__Write__Connection: "mongodb://mongo:27017"
+      Redis__Connection: "redis:6379"
+      RabbitMQ__Host: "rabbitmq"
+    build:
+      context: ../..
+      dockerfile: src/2-Services/Tasks/Api/Tasks.Write.Api/Dockerfile
+    ports:
+      - 5026:80
+      - 5027:443
+    networks:
+      - taskomask-network
+    depends_on:
+      - redis
+      - mongo
+      - rabbitmq
+
+  identity-api:
+    container_name: identity-api
+    image: ${DOCKER_REGISTRY-}identity-api
+    restart: on-failure
+    environment:
+      SQL__Connection: "Server=sql;Database=[DatabaseName];User=sa;Password=Your_password123;"
+      Redis__Connection: "redis:6379"
+      RabbitMQ__Host: "rabbitmq"
+    build:
+      context: ../..
+      dockerfile: src/2-Services/Identity/Api/Identity.Api/Dockerfile
+    ports:
+      - 5017:443
+    networks:
+      - taskomask-network
+    depends_on:
+      - sql
+      - redis
+
+  aggregator:
+    container_name: aggregator
+    image: ${DOCKER_REGISTRY-}aggregator
+    restart: on-failure
+    build:
+      context: ../..
+      dockerfile: src/3-ApiGateways/UserPanel/Aggregator/Dockerfile
+    ports:
+      - 5002:80
+      - 5003:443
+    networks:
+      - taskomask-network
+    depends_on:
+      - owners-read-api
+      - boards-read-api
+      - tasks-read-api
+      - identity-api
+
+  api-gateway:
+    container_name: api-gateway
+    image: ${DOCKER_REGISTRY-}api-gateway
+    restart: on-failure
+    build:
+      context: ../..
+      dockerfile: src/3-ApiGateways/UserPanel/ApiGateway/Dockerfile
+    ports:
+      - 5000:80
+      - 5001:443
+    networks:
+      - taskomask-network
+    depends_on:
+      - owners-read-api
+      - owners-write-api
+      - boards-read-api
+      - boards-write-api
+      - tasks-read-api
+      - tasks-write-api
+      - identity-api
+      - aggregator
+
+  user-panel-client:
+    container_name: user-panel-client
+    image: ${DOCKER_REGISTRY-}user-panel-client
+    build:
+      context: ../..
+      dockerfile: src/4-Clients/UserPanel/Dockerfile
+    ports:
+      - "5010:80"
+      - "5011:443"
+    depends_on:
+     - api-gateway
+
+  website-client:
+    container_name: website-client
+    image: ${DOCKER_REGISTRY-}website-client
+    build:
+      context: ../..
+      dockerfile: src/4-Clients/Website/Dockerfile
+    ports:
+      - "5008:80"
+      - "5009:443"
+
+networks:
+  taskomask-network:
+
+volumes:
+  redis:
+  mongo:
+  seq:
+  sql:
+  rabbitmq:
+
+
